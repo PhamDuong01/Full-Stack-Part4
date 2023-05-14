@@ -1,4 +1,76 @@
 const listHelper = require('../ultils/list_helper');
+const blogslist = [
+  {
+    title: '1 A',
+    author: 'John',
+    likes: 1,
+  },
+  {
+    title: '2 A',
+    author: 'Doe',
+    likes: 1,
+  },
+  {
+    title: '3 A',
+    author: 'My',
+    likes: 1,
+  },
+  {
+    title: '4 A',
+    author: 'Doe',
+    likes: 1,
+  },
+  {
+    title: '5 A',
+    author: 'John',
+    likes: 1,
+  },
+  {
+    title: '6 A',
+    author: 'My',
+    likes: 1,
+  },
+  {
+    title: '7 A',
+    author: 'My',
+    likes: 1,
+  },
+  {
+    title: '8 A',
+    author: 'John',
+    likes: 1,
+  },
+  {
+    title: '9 A',
+    author: 'Doe',
+    likes: 1,
+  },
+  {
+    title: '10 A',
+    author: 'My',
+    likes: 1,
+  },
+  {
+    title: '11 A',
+    author: 'Doe',
+    likes: 1,
+  },
+  {
+    title: '12 A',
+    author: 'John',
+    likes: 1,
+  },
+  {
+    title: '13 A',
+    author: 'My',
+    likes: 1,
+  },
+  {
+    title: '14 A',
+    author: 'My',
+    likes: 1,
+  },
+];
 
 test('dummy returns one', () => {
   const blogs = [];
@@ -94,5 +166,22 @@ describe('Most likes of Blogs', () => {
 
     const result = listHelper.favoriteBlog(listWithMoreBlog);
     expect(result).toEqual(expected);
+  });
+  test('of author have most Blogs', () => {
+    const result = listHelper.authorBlogAndLike(blogslist);
+    const expected = {
+      author: 'My',
+      blogs: 6,
+    };
+    expect(result.blog).toEqual(expected);
+  });
+  test('of author have most likes', () => {
+    const result = listHelper.authorBlogAndLike(blogslist);
+    console.log(result);
+    const expected = {
+      author: 'My',
+      likes: 6,
+    };
+    expect(result.like).toEqual(expected);
   });
 });
