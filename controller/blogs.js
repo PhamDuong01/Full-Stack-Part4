@@ -20,6 +20,12 @@ blogsRouter.get('/:id', (request, response, next) => {
 
 blogsRouter.post('/', async (request, response, next) => {
   const body = request.body;
+
+  if (!body.title || !body.url) {
+    response.status(400).end();
+    return;
+  }
+
   const blog = new Blog({
     title: body.title,
     author: body.author,

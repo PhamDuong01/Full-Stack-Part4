@@ -64,6 +64,25 @@ test('the likes property is missing will default value 0', async () => {
   expect(responseBlog.body.likes).toBe(0);
 });
 
+test('missing title or url must recieve 400 status', async () => {
+  const missTitle = {
+    author: 'Author',
+    content: 'New content',
+    url: 'New URL',
+    likes: 0,
+  };
+  const missUrl = {
+    title: 'New Blog',
+    author: 'Author',
+    content: 'New content',
+
+    likes: 0,
+  };
+
+  await api.post('/api/blogs').send(missTitle).expect(400);
+  await api.post('/api/blogs').send(missUrl).expect(400);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
