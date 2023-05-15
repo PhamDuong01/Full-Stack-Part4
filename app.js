@@ -20,7 +20,7 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
-app.use(requestLogger);
+// app.use(requestLogger);
 
 //setup morgan to log requests
 // morgan.token('body', function (req, res) {

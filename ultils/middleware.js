@@ -1,4 +1,5 @@
 const logger = require('./logger');
+const config = require('./config');
 
 const requestLogger = (request, response, next) => {
   logger.infoLog('Method:', request.method);
