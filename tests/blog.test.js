@@ -37,7 +37,6 @@ test('creates a new blog post', async () => {
     author: 'Author',
     content: 'New content',
     url: 'New URL',
-    likes: 0,
   };
 
   await api
@@ -51,6 +50,18 @@ test('creates a new blog post', async () => {
 
   const contents = allBlog.body.map((blog) => blog.content);
   expect(contents).toContain(newBlog.content);
+});
+
+test('the likes property is missing will default value 0', async () => {
+  const newBlog = {
+    title: 'New Blog',
+    author: 'Author',
+    content: 'New content',
+    url: 'New URL',
+  };
+  const responseBlog = await api.post('/api/blogs').send(newBlog);
+
+  expect(responseBlog.body.likes).toBe(0);
 });
 
 afterAll(async () => {
