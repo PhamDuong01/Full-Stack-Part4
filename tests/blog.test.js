@@ -83,6 +83,34 @@ test('missing title or url must recieve 400 status', async () => {
   await api.post('/api/blogs').send(missUrl).expect(400);
 });
 
+describe('deletion of a Blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const allBlogs = await api.get('/api/blogs');
+    const trueIDInDB = allBlogs.body[0].id;
+    await api.delete(`/api/blogs/${trueIDInDB}`).expect(204);
+  });
+  test('failed with status code 404 if id is invalid', async () => {
+    const invaledID = '5a3d5da59070081a82a3445';
+    await api.delete(`/api/blogs/${invaledID}`).expect(404);
+  });
+});
+
+describe('updating the number likes of a Blog', () => {
+  test('increase like by 1', async () => {
+    const allBlogs = await api.get('/api/blogs');
+    const updateBlog = {
+      ...allBlogs.body[1],
+      likes: allBlogs.body[1].likes + 1,
+    };
+    const trueIDInDB = allBlogs.body[0].id;
+    await api.put(`/api/blogs/${trueIDInDB}`).send(updateBlog).expect(200);
+  });
+  //   test('descrease like by 1', async () => {
+  //     const invaledID = '5a3d5da59070081a82a3445';
+  //     await api.delete(`/api/blogs/${invaledID}`).expect(404);
+  //   });
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });

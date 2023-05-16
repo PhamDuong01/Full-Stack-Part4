@@ -38,29 +38,29 @@ blogsRouter.post('/', async (request, response, next) => {
   response.status(201).json(saveBlog);
 });
 
-blogsRouter.delete('/:id', (request, response, next) => {
-  Blog.findByIdAndRemove(request.params.id)
-    .then(() => {
-      response.status(204).end();
-    })
-    .catch((error) => next(error));
+blogsRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await Blog.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  } catch (exception) {
+    next(exception);
+  }
 });
 
-blogsRouter.put('/:id', (request, response, next) => {
-  const body = request.body;
-
+blogsRouter.put('/:id', async (request, response, next) => {
+  const body = await request.body;
   const blog = {
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes,
   };
-
-  Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-    .then((updatedBlog) => {
-      response.json(updatedBlog);
-    })
-    .catch((error) => next(error));
+  try {
+    const updateBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true });
+    response.status(200).json(updateBlog);
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 module.exports = blogsRouter;
