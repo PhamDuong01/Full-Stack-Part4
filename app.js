@@ -5,9 +5,10 @@ const cors = require('cors');
 const { url } = require('./ultils/config');
 const { infoLog, errorLog } = require('./ultils/logger');
 const { requestLogger, unknownEndpoint, errorHandler } = require('./ultils/middleware');
-const userRouter = require('./controller/users');
 const mongoose = require('mongoose');
+const userRouter = require('./controller/users');
 const blogRouter = require('./controller/blogs');
+const loginRouter = require('./controller/login');
 
 infoLog('connecting to database', url);
 mongoose
@@ -31,6 +32,7 @@ app.use(requestLogger);
 
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);
+app.use('/api/login', loginRouter);
 app.use(unknownEndpoint);
 app.use(errorHandler);
 
