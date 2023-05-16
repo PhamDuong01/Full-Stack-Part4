@@ -7,6 +7,7 @@ const { infoLog, errorLog } = require('./ultils/logger');
 const { requestLogger, unknownEndpoint, errorHandler } = require('./ultils/middleware');
 const userRouter = require('./controller/users');
 const mongoose = require('mongoose');
+const blogRouter = require('./controller/blogs');
 
 infoLog('connecting to database', url);
 mongoose
@@ -28,6 +29,7 @@ app.use(requestLogger);
 // });
 // app.use(morgan(`:method :url :status :res[content-length] - :response-time ms :body`));
 
+app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);
 app.use(unknownEndpoint);
 app.use(errorHandler);

@@ -1,8 +1,9 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 blogsRouter.get('/', async (request, response) => {
-  const allBlog = await Blog.find({});
+  const allBlog = await Blog.find({}).populate('user', { username: 1, name: 1 });
   response.status(200).json(allBlog);
 });
 
@@ -25,6 +26,8 @@ blogsRouter.post('/', async (request, response, next) => {
     response.status(400).end();
     return;
   }
+  const user = await User.findById(body.id);
+  if (!user) return response.status(400).end();
 
   const blog = new Blog({
     title: body.title,
@@ -32,12 +35,26 @@ blogsRouter.post('/', async (request, response, next) => {
     content: body.content,
     url: body.url,
     likes: body.likes || 0,
+    user: body.id,
   });
 
   const saveBlog = await blog.save();
+  user.blogs = user.blogs.concat(saveBlog.id);
+  await user.save();
   response.status(201).json(saveBlog);
 });
-
+//delete all blog
+blogsRouter.delete('/', async (request, response, next) => {
+  await Blog.deleteMany({});
+  response.status(204).end();
+  // try {
+  //   await Blog.findByIdAndRemove(request.params.id);
+  //   response.status(204).end();
+  // } catch (exception) {
+  //   next(exception);
+  // }
+});
+//delete one blog
 blogsRouter.delete('/:id', async (request, response, next) => {
   try {
     await Blog.findByIdAndRemove(request.params.id);
