@@ -31,9 +31,13 @@ const errorHandler = (error, request, response, next) => {
 };
 
 const tokenExtractor = (request, response, next) => {
-  let authorization = request.get('authorization');
+  const authorization = request.get('authorization');
   if (authorization && authorization.startsWith('Bearer ')) {
-    request.token = authorization.replace('Bearer ', '');
+    const decodedToken = jwt.verify(authorization.replace('Bearer ', ''), process.env.SECRET);
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' });
+    }
+    request.token = decodedToken;
   }
 
   next();
