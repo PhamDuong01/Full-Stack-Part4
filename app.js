@@ -4,7 +4,12 @@ const cors = require('cors');
 // const morgan = require('morgan');
 const { url } = require('./ultils/config');
 const { infoLog, errorLog } = require('./ultils/logger');
-const { requestLogger, unknownEndpoint, errorHandler } = require('./ultils/middleware');
+const {
+  requestLogger,
+  unknownEndpoint,
+  errorHandler,
+  tokenExtractor,
+} = require('./ultils/middleware');
 const mongoose = require('mongoose');
 const userRouter = require('./controller/users');
 const blogRouter = require('./controller/blogs');
@@ -30,7 +35,7 @@ app.use(requestLogger);
 // });
 // app.use(morgan(`:method :url :status :res[content-length] - :response-time ms :body`));
 
-app.use('/api/blogs', blogRouter);
+app.use('/api/blogs', tokenExtractor, blogRouter);
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
 app.use(unknownEndpoint);
