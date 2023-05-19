@@ -19,7 +19,7 @@ blogsRouter.get('/:id', async (request, response, next) => {
 blogsRouter.post('/', async (request, response, next) => {
   const body = request.body;
   if (!body.title || !body.url) {
-    response.status(400).end();
+    response.status(400).send({ message: 'title or url not provided' });
     return;
   }
 
@@ -35,7 +35,7 @@ blogsRouter.post('/', async (request, response, next) => {
       content: body.content,
       url: body.url,
       likes: body.likes || 0,
-      user: body.id,
+      user: token.id,
     });
 
     const saveBlog = await blog.save();
